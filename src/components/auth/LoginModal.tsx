@@ -69,8 +69,7 @@ export function LoginModal({ onClose }: LoginModalProps) {
               }
             } catch (signUpError) {
               console.error('Sign up error:', signUpError);
-              showLoginSuccessAlert('Administrator');
-              showErrorAlert('Error Sistem', 'Akun demo mungkin sudah ada dengan password berbeda. Silakan gunakan kredensial yang benar atau hubungi administrator.');
+              showErrorAlert('Gagal Membuat Akun Demo', 'Terjadi kesalahan saat membuat akun demo. Periksa konfigurasi Supabase Anda (RLS policies, database triggers) atau gunakan kredensial yang sudah ada.');
               return;
             }
           } else {
