@@ -1,0 +1,419 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom animations */
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes bounce-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.3s ease-out;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.2s ease-in-out;
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.4s ease-out;
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+/* Modern scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Text clamp utility */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-only {
+    display: block !important;
+  }
+  
+  body {
+    background: white !important;
+  }
+  
+  .shadow-sm,
+  .shadow-md,
+  .shadow-lg {
+    box-shadow: none !important;
+  }
+}
+
+/* Enhanced focus styles */
+.focus-visible:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Mobile-optimized touch targets */
+@media (max-width: 640px) {
+  button, input, select, textarea {
+    min-height: 44px; /* iOS recommended touch target */
+  }
+  
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Improved mobile typography */
+@media (max-width: 640px) {
+  body {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  
+  h1 { font-size: 1.25rem; }
+  h2 { font-size: 1.125rem; }
+  h3 { font-size: 1rem; }
+  h4 { font-size: 0.875rem; }
+  
+  .text-xs { font-size: 0.75rem; }
+  .text-sm { font-size: 0.8125rem; }
+  .text-base { font-size: 0.875rem; }
+  .text-lg { font-size: 1rem; }
+  .text-xl { font-size: 1.125rem; }
+}
+
+/* Enhanced mobile interactions */
+@media (max-width: 640px) {
+  .hover\:bg-gray-50:hover {
+    background-color: transparent;
+  }
+  
+  .hover\:bg-blue-50:hover {
+    background-color: transparent;
+  }
+  
+  /* Active states for mobile */
+  button:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease-in-out;
+  }
+  
+  .calendar-cell:active {
+    background-color: #f3f4f6;
+  }
+}
+
+/* Improved mobile spacing */
+@media (max-width: 640px) {
+  .container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  
+  .space-y-1 > * + * {
+    margin-top: 0.125rem;
+  }
+  
+  .space-y-2 > * + * {
+    margin-top: 0.25rem;
+  }
+  
+  .space-y-3 > * + * {
+    margin-top: 0.5rem;
+  }
+}
+
+/* Smooth transitions */
+* {
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+/* Button hover effects */
+button:not(:disabled):hover {
+  transform: translateY(-1px);
+}
+
+button:not(:disabled):active {
+  transform: translateY(0);
+}
+
+/* Mobile-specific button styles */
+@media (max-width: 640px) {
+  button:not(:disabled):hover {
+    transform: none;
+  }
+  
+  button:not(:disabled):active {
+    transform: scale(0.98);
+  }
+}
+
+/* Modal backdrop animation */
+.modal-backdrop {
+  animation: fade-in 0.2s ease-in-out;
+}
+
+.modal-content {
+  animation: bounce-in 0.4s ease-out;
+}
+
+/* Calendar cell hover effects */
+.calendar-cell:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile calendar optimizations */
+@media (max-width: 640px) {
+  .calendar-cell:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+/* Modern gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* iOS Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+  input[type="date"],
+  input[type="time"] {
+    -webkit-appearance: none;
+    background-color: white;
+  }
+}
+
+/* Android Chrome specific optimizations */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  select {
+    background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23666' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 12px;
+    padding-right: 24px;
+  }
+}
+/* SweetAlert2 Custom Styles */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
+
+.colored-toast {
+  border-radius: 12px !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+  border: none !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+.swal2-popup-modern {
+  border-radius: 16px !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
+  border: none !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+.swal2-confirm-modern {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 12px 24px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3) !important;
+}
+
+.swal2-confirm-modern:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4) !important;
+}
+
+.swal2-cancel-modern {
+  background: #f3f4f6 !important;
+  color: #374151 !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 8px !important;
+  padding: 12px 24px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  transition: all 0.3s ease !important;
+}
+
+.swal2-cancel-modern:hover {
+  background: #e5e7eb !important;
+  transform: translateY(-1px) !important;
+}
+
+.swal2-loading-modern {
+  border-radius: 16px !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
+}
+
+.swal2-login-success {
+  border-radius: 20px !important;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2) !important;
+  border: none !important;
+  overflow: hidden !important;
+}
+
+.login-success-content {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.user-avatar {
+  margin-bottom: 20px;
+}
+
+.avatar-circle {
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.avatar-circle i {
+  font-size: 32px;
+  color: #ffffff;
+}
+
+.welcome-text {
+  font-size: 18px;
+  margin: 10px 0 5px 0;
+  font-weight: 600;
+}
+
+.role-text {
+  font-size: 14px;
+  opacity: 0.9;
+  margin: 0;
+}
+
+.swal2-crud-success {
+  border-radius: 12px !important;
+  box-shadow: 0 10px 25px rgba(34, 197, 94, 0.15) !important;
+  border-left: 4px solid #22c55e !important;
+}
+
+/* SweetAlert2 Timer Progress Bar */
+.swal2-timer-progress-bar {
+  background: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* SweetAlert2 Loading Spinner */
+.swal2-loader {
+  border-color: #3b82f6 transparent #3b82f6 transparent !important;
+}
+
+/* Responsive SweetAlert */
+@media (max-width: 640px) {
+  .swal2-popup {
+    width: 90% !important;
+    margin: 0 auto !important;
+  }
+  
+  .login-success-content {
+    padding: 15px 0;
+  }
+  
+  .avatar-circle {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .avatar-circle i {
+    font-size: 24px;
+  }
+  
+  .welcome-text {
+    font-size: 16px;
+  }
+  
+  .role-text {
+    font-size: 13px;
+  }
+}
