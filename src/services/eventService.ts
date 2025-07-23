@@ -1,8 +1,54 @@
-import { supabase } from '../lib/supabase';
+import { supabase, isSupabaseAvailable } from '../lib/supabase';
 import { Event, EventCategory } from '../types';
+
+// Mock data for when Supabase is not configured
+const mockCategories: EventCategory[] = [
+  { id: 'meeting', name: 'Rapat', color: 'text-blue-700', bgColor: 'bg-blue-100' },
+  { id: 'conference', name: 'Konferensi', color: 'text-purple-700', bgColor: 'bg-purple-100' },
+  { id: 'workshop', name: 'Workshop', color: 'text-green-700', bgColor: 'bg-green-100' },
+  { id: 'seminar', name: 'Seminar', color: 'text-orange-700', bgColor: 'bg-orange-100' },
+  { id: 'social', name: 'Acara Sosial', color: 'text-pink-700', bgColor: 'bg-pink-100' },
+  { id: 'training', name: 'Pelatihan', color: 'text-indigo-700', bgColor: 'bg-indigo-100' },
+  { id: 'other', name: 'Lainnya', color: 'text-gray-700', bgColor: 'bg-gray-100' }
+];
+
+const mockEvents: Event[] = [
+  {
+    id: '1',
+    title: 'Rapat Koordinasi Bulanan',
+    description: 'Rapat koordinasi rutin untuk membahas progress dan rencana kegiatan bulan depan.',
+    startDate: new Date().toISOString().split('T')[0],
+    endDate: new Date().toISOString().split('T')[0],
+    startTime: '09:00',
+    endTime: '11:00',
+    location: 'Ruang Rapat Utama',
+    category: mockCategories[0],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: '2',
+    title: 'Workshop Digital Marketing',
+    description: 'Pelatihan intensif tentang strategi pemasaran digital untuk UMKM.',
+    startDate: new Date(Date.now() + 86400000).toISOString().split('T')[0],
+    endDate: new Date(Date.now() + 86400000).toISOString().split('T')[0],
+    startTime: '13:00',
+    endTime: '17:00',
+    location: 'Aula Serbaguna',
+    category: mockCategories[2],
+    externalLink: 'https://example.com/workshop',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  }
+];
 
 // Event Categories
 export const fetchEventCategories = async (): Promise<EventCategory[]> => {
+  if (!isSupabaseAvailable()) {
+    console.warn('Supabase not configured, returning mock categories');
+    return mockCategories;
+  }
+
   const { data, error } = await supabase
     .from('event_categories')
     .select('*')
@@ -10,7 +56,8 @@ export const fetchEventCategories = async (): Promise<EventCategory[]> => {
 
   if (error) {
     console.error('Error fetching categories:', error);
-    throw error;
+    console.warn('Falling back to mock categories');
+    return mockCategories;
   }
 
   return data.map(category => ({
@@ -23,6 +70,11 @@ export const fetchEventCategories = async (): Promise<EventCategory[]> => {
 
 // Events
 export const fetchEvents = async (): Promise<Event[]> => {
+  if (!isSupabaseAvailable()) {
+    console.warn('Supabase not configured, returning mock events');
+    return mockEvents;
+  }
+
   const { data, error } = await supabase
     .from('events')
     .select(`
@@ -38,7 +90,8 @@ export const fetchEvents = async (): Promise<Event[]> => {
 
   if (error) {
     console.error('Error fetching events:', error);
-    throw error;
+    console.warn('Falling back to mock events');
+    return mockEvents;
   }
 
   return data.map(event => ({
@@ -63,6 +116,10 @@ export const fetchEvents = async (): Promise<Event[]> => {
 };
 
 export const createEvent = async (eventData: Omit<Event, 'id' | 'createdAt' | 'updatedAt'>): Promise<Event> => {
+  if (!isSupabaseAvailable()) {
+    throw new Error('Supabase not configured. Please set up your environment variables to create events.');
+  }
+
   const { data, error } = await supabase
     .from('events')
     .insert({
@@ -114,6 +171,10 @@ export const createEvent = async (eventData: Omit<Event, 'id' | 'createdAt' | 'u
 };
 
 export const updateEvent = async (id: string, eventData: Partial<Omit<Event, 'id' | 'createdAt' | 'updatedAt'>>): Promise<Event> => {
+  if (!isSupabaseAvailable()) {
+    throw new Error('Supabase not configured. Please set up your environment variables to update events.');
+  }
+
   const updateData: any = {
     updated_at: new Date().toISOString()
   };
@@ -170,6 +231,10 @@ export const updateEvent = async (id: string, eventData: Partial<Omit<Event, 'id
 };
 
 export const deleteEvent = async (id: string): Promise<void> => {
+  if (!isSupabaseAvailable()) {
+    throw new Error('Supabase not configured. Please set up your environment variables to delete events.');
+  }
+
   const { error } = await supabase
     .from('events')
     .delete()

@@ -4,16 +4,31 @@ import { Database } from './database.types';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey || 
-    supabaseUrl === 'https://your-project-ref.supabase.co' || 
-    supabaseAnonKey === 'your-anon-public-key-here') {
-  throw new Error('Please configure your Supabase environment variables in .env file. Replace the placeholder values with your actual Supabase project URL and anon key.');
+// Check if Supabase credentials are properly configured
+const isSupabaseConfigured = supabaseUrl && 
+  supabaseAnonKey && 
+  supabaseUrl !== 'https://your-project-ref.supabase.co' && 
+  supabaseAnonKey !== 'your-anon-public-key-here' &&
+  supabaseUrl.startsWith('https://') &&
+  supabaseUrl.includes('.supabase.co');
+
+if (!isSupabaseConfigured) {
+  console.error('Supabase not configured. Using mock mode.');
 }
 
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
+// Create Supabase client only if properly configured
+export const supabase = isSupabaseConfigured 
+  ? createClient<Database>(supabaseUrl, supabaseAnonKey)
+  : null;
+
+// Helper function to check if Supabase is available
+export const isSupabaseAvailable = () => supabase !== null;
 
 // Auth helper functions
 export const signInWithEmail = async (email: string, password: string) => {
+  if (!supabase) {
+    throw new Error('Supabase not configured. Please set up your environment variables.');
+  }
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
@@ -22,6 +37,9 @@ export const signInWithEmail = async (email: string, password: string) => {
 };
 
 export const signUpWithEmail = async (email: string, password: string) => {
+  if (!supabase) {
+    throw new Error('Supabase not configured. Please set up your environment variables.');
+  }
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
@@ -33,11 +51,17 @@ export const signUpWithEmail = async (email: string, password: string) => {
 };
 
 export const signOut = async () => {
+  if (!supabase) {
+    throw new Error('Supabase not configured. Please set up your environment variables.');
+  }
   const { error } = await supabase.auth.signOut();
   return { error };
 };
 
 export const getCurrentUser = async () => {
+  if (!supabase) {
+    return { user: null, error: null };
+  }
   const { data: { user }, error } = await supabase.auth.getUser();
   return { user, error };
 };

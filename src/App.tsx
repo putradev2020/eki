@@ -14,7 +14,7 @@ import { LoadingScreen } from './components/LoadingScreen';
 import { useApp } from './context/AppContext';
 import { Github } from 'lucide-react';
 import { fetchEvents, fetchEventCategories } from './services/eventService';
-import { getCurrentUser } from './lib/supabase';
+import { getCurrentUser, isSupabaseAvailable } from './lib/supabase';
 
 function CalendarContent() {
   const { state } = useApp();
@@ -58,26 +58,37 @@ function AppContent() {
       try {
         dispatch({ type: 'SET_LOADING', payload: true });
         
+        // Show warning if Supabase is not configured
+        if (!isSupabaseAvailable()) {
+          console.warn('⚠️ Supabase not configured. Using demo data. To connect to your database, please update your .env file with actual Supabase credentials.');
+          dispatch({ 
+            type: 'SET_NOTIFICATION', 
+            payload: 'Demo mode: Update .env file to connect to your database' 
+          });
+        }
+        
         // Load events
         const events = await fetchEvents();
         dispatch({ type: 'SET_EVENTS', payload: events });
         
         // Check for existing user session
-        const { user } = await getCurrentUser();
-        if (user) {
-          dispatch({
-            type: 'SET_USER',
-            payload: {
-              id: user.id,
-              email: user.email || '',
-              role: 'admin',
-              name: user.user_metadata?.name || 'Administrator'
-            }
-          });
+        if (isSupabaseAvailable()) {
+          const { user } = await getCurrentUser();
+          if (user) {
+            dispatch({
+              type: 'SET_USER',
+              payload: {
+                id: user.id,
+                email: user.email || '',
+                role: 'admin',
+                name: user.user_metadata?.name || 'Administrator'
+              }
+            });
+          }
         }
       } catch (error) {
         console.error('Error loading data:', error);
-        dispatch({ type: 'SET_NOTIFICATION', payload: 'Gagal memuat data' });
+        dispatch({ type: 'SET_NOTIFICATION', payload: 'Running in demo mode with sample data' });
       } finally {
         dispatch({ type: 'SET_LOADING', payload: false });
       }
