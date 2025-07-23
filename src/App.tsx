@@ -10,6 +10,7 @@ import { EventList } from './components/EventList';
 import { AdminPanel } from './components/admin/AdminPanel';
 import { LoginModal } from './components/auth/LoginModal';
 import { Notification } from './components/Notification';
+import { LoadingScreen } from './components/LoadingScreen';
 import { useApp } from './context/AppContext';
 import { Github } from 'lucide-react';
 import { fetchEvents, fetchEventCategories } from './services/eventService';
@@ -48,6 +49,7 @@ function CalendarContent() {
 
 function AppContent() {
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { dispatch } = useApp();
 
   useEffect(() => {
@@ -83,6 +85,10 @@ function AppContent() {
 
     loadData();
   }, [dispatch]);
+
+  if (isLoading) {
+    return <LoadingScreen onLoadingComplete={() => setIsLoading(false)} />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
